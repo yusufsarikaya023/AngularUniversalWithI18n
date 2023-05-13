@@ -5,9 +5,15 @@
   "projects": {
     "AngularUniversalWithI18n": {
       "i18n": {
-        "sourceLocale": "en-US",
+        "sourceLocale": {
+          "code": "en-US",
+          "baseHref": "/"
+        },
         "locales": {
-          "tr-TR": "src/locale/messages.tr.xlf"
+          "tr-TR": {
+            "baseHref": "/",
+            "translation": "/src/locale/messages.tr.xlf"
+          }
         }
       },
       "projectType": "application",
@@ -23,8 +29,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "localize": ["tr-TR"],
-            "outputPath": "dist/angular-universal-with-i18n",
+            "localize": ["tr-TR", "en-US"],
+            "outputPath": "dist/AngularUniversalWithI18n/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -101,6 +107,59 @@
             "styles": ["src/styles.scss"],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/AngularUniversalWithI18n/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "AngularUniversalWithI18n:build:development",
+              "serverTarget": "AngularUniversalWithI18n:server:development"
+            },
+            "production": {
+              "browserTarget": "AngularUniversalWithI18n:build:production",
+              "serverTarget": "AngularUniversalWithI18n:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": ["/"]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "AngularUniversalWithI18n:build:production",
+              "serverTarget": "AngularUniversalWithI18n:server:production"
+            },
+            "development": {
+              "browserTarget": "AngularUniversalWithI18n:build:development",
+              "serverTarget": "AngularUniversalWithI18n:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
